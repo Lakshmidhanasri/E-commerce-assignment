@@ -1,0 +1,21 @@
+/* src/styles/Pagination.css */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+button:disabled {
+  background-color: #ccc;
+}

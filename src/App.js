@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom"; // Import useNavigate
+import Header from "./components/Header";
+import ProductList from "./components/ProductList";
+import AddToCartModal from "./components/AddToCartModal";
+import ThankYouPage from "./components/ThankYouPage";
+import productsData from "./data/products";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [viewProductName, setViewProductName] = useState("");
+  const navigate = useNavigate(); // Get navigate function
+
+  const handleAddToCart = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleConfirmAddToCart = () => {
+    console.log("Product added to cart:", selectedProduct);
+    setSelectedProduct(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <ProductList
+                products={productsData}
+                onAddToCart={handleAddToCart}
+                onViewProduct={(name) => {
+                  setViewProductName(name);
+                  navigate("/thank-you"); // Now navigate is defined
+                }}
+              />
+              {selectedProduct && (
+                <AddToCartModal
+                  product={selectedProduct}
+                  onClose={() => setSelectedProduct(null)}
+                  onConfirm={handleConfirmAddToCart}
+                />
+              )}
+            </>
+          }
+        />
+        <Route
+          path="/thank-you"
+          element={<ThankYouPage productName={viewProductName} />}
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
